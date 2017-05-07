@@ -8,7 +8,7 @@ import interfaceUser.readMapFile;
 public class objGhost extends objMove implements Runnable{
 	private objNode []initNodeAttr;
 	private objNode []destinationNodeAttr;
-	private final int COUNT = foodList.size();
+	private final int COUNT = ghostList.size();
 	
 	public List<objNode> nodeWentThrough = new ArrayList<objNode>();
 	
@@ -50,6 +50,7 @@ public class objGhost extends objMove implements Runnable{
 		
 		// Find road to destination node
 		while(foodList.size() != 0){
+
 			for(int i = 0; i < COUNT; i++){
 				// Ghost can repeat it's move
 				if((initNode[i].coordX == destinationNode[i].coordX) && (initNode[i].coordY == destinationNode[i].coordY)){

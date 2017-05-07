@@ -52,15 +52,15 @@ public class test1 {
 		Thread threadGhost = new Thread(objGhost);
 		
 		threadPacman.start();
-		//threadGhost.start();
+		threadGhost.start();
 		
-		/*try {
+		try {
 			threadPacman.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		threadGhost.stop();*/
+		threadGhost.stop();
 		//objPacman.run();
 		//objGhost.run();
 	}

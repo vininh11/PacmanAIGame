@@ -251,7 +251,7 @@ public class objPacman extends objMove implements Runnable{
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 				return objRandom;
 			}else{
-				return avoidGhost(objRandom, this.nearestGhost);
+				return avoidGhost(pacman, this.nearestGhost);
 			}
 		}
 		
@@ -285,7 +285,7 @@ public class objPacman extends objMove implements Runnable{
 		
 		/* destination thuoc phai duoi cua pacman */
 		else if ( ghost.coordX > pacman.coordX && ghost.coordY < pacman.coordY){
-			rangeX =  pacman.coordX - 100;
+			rangeX =  pacman.coordX - 100 - 1;
 			rdCoordXOfNode = 100 + rdCoordX.nextInt(rangeX);
 			rangeY = 100 - pacman.coordY;
 			rdCoordYOfNode = pacman.coordY + rdCoordY.nextInt(rangeY);
@@ -319,7 +319,7 @@ public class objPacman extends objMove implements Runnable{
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 				return objRandom;
 			}else{
-				return avoidGhost(objRandom, this.nearestGhost);
+				return avoidGhost(pacman, this.nearestGhost);
 			}
 		}
 	}

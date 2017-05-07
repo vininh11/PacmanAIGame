@@ -13,9 +13,9 @@ public class objAttributeCommon {
 	public final char ROAD_CONTENT = ' ';
 	public final char GHOST_CONTENT = 'G';
 	public final char PACMAN_CONTENT = 'P';
-	public final double SAFE_DISTANCE = 1;
-	public final double SAFE_DISTANCE2 = 1;
+	public final double SAFE_DISTANCE = 2;
+	public final double SAFE_DISTANCE2 = 2;
 	public final int SPEED_MOVE = 150;
-	public final int WIDTH_MAP = 75;
-	public final int HEIGHT_MAP = 7;
+	public final int WIDTH_MAP = 37;
+	public final int HEIGHT_MAP = 19;
 }
