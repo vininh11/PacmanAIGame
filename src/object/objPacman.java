@@ -12,10 +12,15 @@ public class objPacman extends objMove implements Runnable{
 	private double []distanceToGhost = new double[foodList.size()];
 	private objGhost nearestGhost = new objGhost();
 	private boolean escapeFlg = false;
+	objNode notifyAll;
 
 	/* Constructor */
 	public objPacman(int coordX, int coordY, char content){
 		super(coordX, coordY, content);
+	}
+	public objPacman(int coordX, int coordY, char content,objNode notifyAll ){
+		super(coordX, coordY, content);
+		this.notifyAll = notifyAll;
 	}
 	public objPacman(){};
 	
@@ -39,87 +44,88 @@ public class objPacman extends objMove implements Runnable{
 		objNode objNotFood = new objNode();
 		
 		while(foodList.size() != 0){
+//			synchronized(notifyAll){
+//				while (notifyAll.runFlg != 1) {
+//                    try {
+//                        notifyAll.wait();
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+
 			
-			/* Dong bo cac doi tuong tren ban do */
-			objNode tempNode = searchInMapList(mapList, initNode);
-			if(tempNode.objContent != PACMAN_CONTENT){
-				initNode = new objPacman(tempNode.coordX, tempNode.coordY, PACMAN_CONTENT);
-				mapList.set(mapList.indexOf(tempNode), initNode);
-			}else{
-				initNode = tempNode;
-			}
-			
-			/* Find Path */
-			initNode.neighborListNode = this.findNeighbor(initNode);		// find neighbor of Node
-			
-			// calculate next destination for Pacman
-			if(minDistanceToGhost(initNode) >= SAFE_DISTANCE2){
-				this.dangerFlg = false;
-			}
-			// Call escape Node
-//			if(cntNeighborAreWall(initNode) >= 3){
-//				this.escapeFlg = true;
-//				nextDestinationNode =  escapeDeadNode(initNode);
-//				objNotFood = nextDestinationNode;
-//			}
-			if(objNotFood == initNode){
-				this.escapeFlg = false;
-				objNotFood = null;
-			}
-			// If pacman escape complete
-//			if(this.escapeFlg){
-//				nextDestinationNode = objNotFood;
-//				if(initNode == objNotFood){
-//					this.escapeFlg = true;
-//				}
-//			}
-			if( this.dangerFlg == false && this.escapeFlg == false){
-//				if(this.escapeFlg == false){
-				if( countInitNodeSameDestinationNode >= 3){
-					nextDestinationNode = calcNextDestinationNodeNotFood(initNode, nextDestinationNode);			// find next destination different food node
-					countInitNodeSameDestinationNode = 0;
+				/* Dong bo cac doi tuong tren ban do */
+				objNode tempNode = searchInMapList(mapList, initNode);
+				if(tempNode.objContent != PACMAN_CONTENT){
+					initNode = new objPacman(tempNode.coordX, tempNode.coordY, PACMAN_CONTENT);
+					mapList.set(mapList.indexOf(tempNode), initNode);
+				}else{
+					initNode = tempNode;
 				}
-				else{
-					nextDestinationNode = calcNextDestinationNode(initNode);				// find next destination food node
-				}
-//				}
-			}
-			/*else if( this.dangerFlg && countInitNodeSameDestinationNode >= 3){
 				
-				nextDestinationNode = calcNextDestinationNodeNotFood(initNode, nextDestinationNode);			// find next destination different food node
-				countInitNodeSameDestinationNode = 0;
-			} else*/ 
-			if(this.dangerFlg){
-				/* In case Ghost is too close */
-				if(sensor(initNode)){
-					nextDestinationNode = avoidGhost(initNode, this.nearestGhost);
+				/* Find Path */
+				initNode.neighborListNode = this.findNeighbor(initNode);		// find neighbor of Node
+				
+				// calculate next destination for Pacman
+				if(minDistanceToGhost(initNode) >= SAFE_DISTANCE2){
+					this.dangerFlg = false;
 				}
-			}
-			
-			distFromDestinationNode = calcDistaneAToB(initNode, nextDestinationNode);	// distance from initNode to destinationNode
-			
-			int sizeOfFoodList = foodList.size();
-			if( sizeOfFoodList != 0){
-				nextNode = nextNode(initNode, nextDestinationNode, sizeOfFoodList, distFromDestinationNode);		// find next node to go
-			}
-			
-			if( nextNode.coordX == initNodeFirst.coordX && nextNode.coordY == initNodeFirst.coordY)
-				countInitNodeSameDestinationNode ++;
-			
-			status = this.calcStatus(initNode, nextNode);
-			if(status == 6)
-				break;
-			listMove = this.gotoAB(initNode, nextNode, status, objPrev);
-			if(nextNode.objContent == FOOD_CONTENT){ 
-				this.eatFood(nextNode);
-			}
-			initNodeFirst = initNode;
-			initNode = listMove.get(1);
-			
-			readMapFile readFile = new readMapFile();
-			for(int j = 0; j < 10; j++)
-				System.out.println("\n");
-			readFile.printListMap(mapList); 				// display to screen
+				// Call escape Node
+	//			if(cntNeighborAreWall(initNode) >= 3){
+	//				this.escapeFlg = true;
+	//				nextDestinationNode =  escapeDeadNode(initNode);
+	//				objNotFood = nextDestinationNode;
+	//			}
+	//			if(objNotFood == initNode){
+	//				this.escapeFlg = false;
+	//				objNotFood = null;
+	//			}
+	
+				if( this.dangerFlg == false && this.escapeFlg == false){
+					if( countInitNodeSameDestinationNode >= 3){
+						nextDestinationNode = calcNextDestinationNodeNotFood(initNode, nextDestinationNode);			// find next destination different food node
+						countInitNodeSameDestinationNode = 0;
+					}
+					else{
+						nextDestinationNode = calcNextDestinationNode(initNode);				// find next destination food node
+					}
+				}
+	
+				if(this.dangerFlg){
+					/* In case Ghost is too close */
+					if(sensor(initNode)){
+						nextDestinationNode = avoidGhost(initNode, this.nearestGhost);
+					}
+				}
+				
+				distFromDestinationNode = calcDistaneAToB(initNode, nextDestinationNode);	// distance from initNode to destinationNode
+				
+				int sizeOfFoodList = foodList.size();
+				if( sizeOfFoodList != 0){
+					nextNode = nextNode(initNode, nextDestinationNode, sizeOfFoodList, distFromDestinationNode);		// find next node to go
+				}
+				
+				if( nextNode.coordX == initNodeFirst.coordX && nextNode.coordY == initNodeFirst.coordY)
+					countInitNodeSameDestinationNode ++;
+				
+				status = this.calcStatus(initNode, nextNode);
+				if(status == 6)
+					break;
+				listMove = this.gotoAB(initNode, nextNode, status, objPrev);
+				if(nextNode.objContent == FOOD_CONTENT){ 
+					this.eatFood(nextNode);
+				}
+				initNodeFirst = initNode;
+				initNode = listMove.get(1);
+				
+//				notifyAll.runFlg = 2;
+//				notifyAll.notifyAll();
+	
+				readMapFile readFile = new readMapFile();
+				for(int j = 0; j < 10; j++)
+					System.out.println("\n");
+				readFile.printListMap(mapList); 				// display to screen
+//			}
 		}
 	}
 	
@@ -354,7 +360,7 @@ public class objPacman extends objMove implements Runnable{
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 				return objRandom;
 			}else{
-				return avoidGhost(pacman, oldDestination);
+				return calcNextDestinationNodeNotFood(pacman, oldDestination);
 			}
 		}
 		
@@ -368,7 +374,7 @@ public class objPacman extends objMove implements Runnable{
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 				return objRandom;
 			}else{
-				return avoidGhost(pacman, oldDestination);
+				return calcNextDestinationNodeNotFood(pacman, oldDestination);
 			}
 		}
 		
@@ -382,7 +388,7 @@ public class objPacman extends objMove implements Runnable{
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 				return objRandom;
 			}else{
-				return avoidGhost(pacman, oldDestination);
+				return calcNextDestinationNodeNotFood(pacman, oldDestination);
 			}
 		}
 		
@@ -396,7 +402,7 @@ public class objPacman extends objMove implements Runnable{
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 				return objRandom;
 			}else{
-				return avoidGhost(pacman, oldDestination);
+				return calcNextDestinationNodeNotFood(pacman, oldDestination);
 			}
 		}
 
@@ -410,7 +416,7 @@ public class objPacman extends objMove implements Runnable{
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 			    return	objRandom;
 			}else{
-				return avoidGhost(pacman, oldDestination);
+				return calcNextDestinationNodeNotFood(pacman, oldDestination);
 			}
 		}
 		
@@ -437,7 +443,7 @@ public class objPacman extends objMove implements Runnable{
 //		int cntObjNeighborIsNotWall = 0;
 //
 //		// chon muc tieu cho pacman la duong di nguoc lai voi diem chet.
-////		if( pacman.neighborListNode.get(0).objContent != WALL_CONTENT){
+//		if( pacman.neighborListNode.get(0).objContent != WALL_CONTENT){
 //			do{
 //				if(destinationNode != null){
 //					rdCoordY =  pacman.coordY + rd.nextInt(100 - pacman.coordY) - 1;
@@ -542,6 +548,7 @@ public class objPacman extends objMove implements Runnable{
 		objNode tempObjNodeB = new objNode();
 		double temp;
 		
+		
 		A.neighborListNode = this.findNeighbor(A);			// find neighbor of Node A
 		B.neighborListNode = this.findNeighbor(B);			// find neighbor of Node A
 		
@@ -587,7 +594,7 @@ public class objPacman extends objMove implements Runnable{
 		} else if( minDistanceB < minDistanceA && cntNeighborB >= cntNeighborA){
 			resultNode = 2;
 		}else{
-			resultNode = 1;
+			resultNode = estimateAbilityOfNode(tempObjNodeA, tempObjNodeB, A, B, destinationNode);
 		}
 		
 		return resultNode;
