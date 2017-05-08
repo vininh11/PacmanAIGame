@@ -9,7 +9,7 @@ public class objAttributeCommon {
 	public static List<objGhost> ghostList = new ArrayList<objGhost>();
 	public int runFlg = 1;
 
-	public final char WALL_CONTENT = 'X';
+	public final char WALL_CONTENT = '█';
 	public final char FOOD_CONTENT = '.';
 	public final char ROAD_CONTENT = ' ';
 	public final char GHOST_CONTENT = 'G';
