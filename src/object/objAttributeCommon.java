@@ -16,7 +16,7 @@ public class objAttributeCommon {
 	public final char PACMAN_CONTENT = 'P';
 	public final double SAFE_DISTANCE = 2;
 	public final double SAFE_DISTANCE2 = 4;
-	public final int SPEED_MOVE = 100;
-	public final int WIDTH_MAP = 107;
+	public final int SPEED_MOVE = 150;
+	public final int WIDTH_MAP = 37;
 	public final int HEIGHT_MAP = 16;
 }

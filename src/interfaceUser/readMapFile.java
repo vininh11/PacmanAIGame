@@ -23,7 +23,7 @@ public class readMapFile extends objAttributeCommon {
 		try {
 			/* Read file link data*/
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
-				        new FileInputStream("map/map.txt"),
+				        new FileInputStream("map/map2.txt"),
 				        Charset.forName("UTF-8")));
 				int c;
 				while((c = reader.read()) != -1) {

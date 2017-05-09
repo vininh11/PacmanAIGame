@@ -63,14 +63,14 @@ public class objGhost extends objMove implements Runnable{
 		while(foodList.size() != 0){
 
 				for(int i = 0; i < COUNT; i++){
-//					synchronized(notifyAll){
-//						while (notifyAll.runFlg != 2) {
-//		                    try {
-//		                        notifyAll.wait();
-//		                    } catch (InterruptedException e) {
-//		                        e.printStackTrace();
-//		                    }
-//		                }
+					synchronized(notifyAll){
+						while (notifyAll.runFlg != 2) {
+		                    try {
+		                        notifyAll.wait();
+		                    } catch (InterruptedException e) {
+		                        e.printStackTrace();
+		                    }
+		                }
 						// Ghost can repeat it's move
 						if((initNode[i].coordX == destinationNode[i].coordX) && (initNode[i].coordY == destinationNode[i].coordY)){
 							if( countLoop[i] % 2 != 0)
@@ -121,13 +121,14 @@ public class objGhost extends objMove implements Runnable{
 						for(int j = 0; j < 10; j++)
 							System.out.println("\n");
 						readFile.printListMap(mapList); 				// display to screen
-//						notifyAll.runFlg = 1;
-//						notifyAll.notifyAll();
+						
+						notifyAll.runFlg = 1;
+						notifyAll.notifyAll();
 					
 					}
 			}
 		}
-//	}
+	}
 	
 //	public void multiGhostsMoveAStar(objNode initNode, objNode destinationNode){
 //		objNode nextNodeToGo = new objNode();

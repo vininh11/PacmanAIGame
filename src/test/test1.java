@@ -55,26 +55,26 @@ public class test1 {
 //		}
 		objGhost objGhost = new objGhost(initNode, destinationNode, notifyAll);
 		
-//		Thread threadGhost = new Thread(objGhost);
-//		Thread threadPacman = new Thread(objPacman);
+		Thread threadGhost = new Thread(objGhost);
+		Thread threadPacman = new Thread(objPacman);
 ////		for(int i = 0; i < initNode.length; i++){
 ////			threadGhost[i] = new Thread(objGhost[i]);
 ////		}
 //
-//		threadGhost.start();
-//		threadPacman.start();
-////		for(int i = 0; i < initNode.length; i++){
-////			threadGhost[i].start();
-////		}
-//
-//		try {
-//			threadPacman.join();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}		
-//		threadGhost.stop();
-		objPacman.run();
-		objGhost.run();
+		threadGhost.start();
+		threadPacman.start();
+//		for(int i = 0; i < initNode.length; i++){
+//			threadGhost[i].start();
+//		}
+
+		try {
+			threadPacman.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		threadGhost.stop();
+//		objPacman.run();
+//		objGhost.run();
 	}
 }

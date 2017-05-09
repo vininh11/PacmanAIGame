@@ -44,14 +44,14 @@ public class objPacman extends objMove implements Runnable{
 		objNode objNotFood = new objNode();
 		
 		while(foodList.size() != 0){
-//			synchronized(notifyAll){
-//				while (notifyAll.runFlg != 1) {
-//                    try {
-//                        notifyAll.wait();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+			synchronized(notifyAll){
+				while (notifyAll.runFlg != 1) {
+                    try {
+                        notifyAll.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
 			
 				/* Dong bo cac doi tuong tren ban do */
@@ -118,14 +118,14 @@ public class objPacman extends objMove implements Runnable{
 				initNodeFirst = initNode;
 				initNode = listMove.get(1);
 				
-//				notifyAll.runFlg = 2;
-//				notifyAll.notifyAll();
+				notifyAll.runFlg = 2;
+				notifyAll.notifyAll();
 	
 				readMapFile readFile = new readMapFile();
 				for(int j = 0; j < 10; j++)
 					System.out.println("\n");
 				readFile.printListMap(mapList); 				// display to screen
-//			}
+			}
 		}
 	}
 	
