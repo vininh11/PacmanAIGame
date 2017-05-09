@@ -2,6 +2,7 @@ package object;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.sound.midi.Sequence;
 
@@ -73,11 +74,15 @@ public class objGhost extends objMove implements Runnable{
 		                }
 						// Ghost can repeat it's move
 						if((initNode[i].coordX == destinationNode[i].coordX) && (initNode[i].coordY == destinationNode[i].coordY)){
-							if( countLoop[i] % 2 != 0)
-								destinationNode = initNodeFirst;
-							else
-								destinationNode = destinationNodeFirst;
-							countLoop[i] ++;
+//							if( countLoop[i] % 2 != 0)
+//								destinationNode = initNodeFirst;
+//							else
+//								destinationNode = destinationNodeFirst;
+//							countLoop[i] ++;
+							
+							int index = new Random().nextInt(foodList.size() - 1);
+							objNode temp = foodList.get(index);
+							destinationNode[i] = this.searchInMapListByCoord(temp.coordX, temp.coordY);
 						}
 		
 						/* Dong bo cac doi tuong tren ban do */
@@ -91,16 +96,22 @@ public class objGhost extends objMove implements Runnable{
 						
 						/* Find path to destination Node */
 						initNode[i].neighborListNode = this.findNeighbor(initNode[i]);			// find neighbor of Node
+						
 						nextNodeToGo[i] = nextNode(initNode[i], destinationNode[i], listNodesWentThrough.get(i));							// find next node to go
+						if (nextNodeToGo[i] == null) {
+							listNodesWentThrough.set(i, new ArrayList<objNode>());
+							nextNodeToGo[i] = nextNode(initNode[i], destinationNode[i], listNodesWentThrough.get(i));
+						}
+						
 						if(objTemp[i] == null)
 							objTemp[i] = nextNodeToGo[i];
 						status[i] = this.calcStatus(initNode[i], nextNodeToGo[i]);// calculate status to go from initNode to nextNodeToGo
 						if(status[i] == 6)
 							break;
 						if(listMove.size() < COUNT)
-							listMove.add(this.gotoAB(initNode[i], nextNodeToGo[i], status[i], objTemp[i]));		// move from initNode to nextNodeToGo
+							listMove.add(this.gotoAB(initNode[i], nextNodeToGo[i], status[i], tempNode));		// move from initNode to nextNodeToGo
 						else
-							listMove.set(i,this.gotoAB(initNode[i], nextNodeToGo[i], status[i], objTemp[i]));
+							listMove.set(i,this.gotoAB(initNode[i], nextNodeToGo[i], status[i], tempNode));
 						
 						if(listMove.size() > 2)
 							objTemp[i] = listMove.get(i).get(2);
@@ -110,9 +121,9 @@ public class objGhost extends objMove implements Runnable{
 						} catch (IndexOutOfBoundsException e) {
 							listNodesWentThrough.get(i).add(listNodesWentThrough.get(i).get(0));
 						}
-						int maxSize = 5;
-						if(listNodesWentThrough.get(i).size() > maxSize)		// max size for list listNodesWentThrough
-							listNodesWentThrough.get(i).remove(0);
+//						int maxSize = 5;
+//						if(listNodesWentThrough.get(i).size() > maxSize)		// max size for list listNodesWentThrough
+//							listNodesWentThrough.get(i).remove(0);
 					
 						initNode[i] = listMove.get(i).get(1);
 						objGhost = new objGhost(initNode[i].coordX, initNode[i].coordY, GHOST_CONTENT);
@@ -232,18 +243,7 @@ public class objGhost extends objMove implements Runnable{
 				}
 			}
 		}
-
-		if (nextNode == null) {
-			for(int i = 0; i < currentNode.neighborListNode.size(); i++){
-				if(currentNode.neighborListNode.get(i).objContent != WALL_CONTENT){
-					tempDistance[i] = calcDistaneAToB(currentNode.neighborListNode.get(i), destinationNode);
-					if(distance > tempDistance[i]){
-						distance = tempDistance[i];
-						nextNode = currentNode.neighborListNode.get(i);
-					}
-				}
-			}
-		}
+		
 		return nextNode;
 	}
 	
