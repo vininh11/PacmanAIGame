@@ -63,6 +63,11 @@ public class test1 {
 			e.printStackTrace();
 		}		
 		threadGhost.stop();
+		if(newFile.foodList.size() == 0)
+			System.out.println("WE WIN!");
+		else{
+			System.out.println("GAME OVER");
+		}
 //		objPacman.run();
 //		objGhost.run();
 	}

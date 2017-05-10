@@ -7,12 +7,12 @@ import java.util.Random;
 import interfaceUser.readMapFile;
 
 public class objPacman extends objMove implements Runnable{
-	private boolean dangerFlg = false;
 	private int changeDestinationFlg = 0;
 	private double []distanceToGhost = new double[foodList.size()];
 	private objGhost nearestGhost = new objGhost();
 	private boolean escapeFlg = false;
 	objNode notifyAll;
+	private boolean dangerFlg = false;
 
 	/* Constructor */
 	public objPacman(int coordX, int coordY, char content){
@@ -262,7 +262,7 @@ public class objPacman extends objMove implements Runnable{
 		}
 		
 		/* destination thuoc trai tren cua pacman */
-		if ( ghost.coordX < pacman.coordX && ghost.coordY > pacman.coordY){
+		if ( ghost.coordX <= pacman.coordX && ghost.coordY >= pacman.coordY){
 			rangeX = 100 + WIDTH_MAP - pacman.coordX;
 			rdCoordXOfNode = pacman.coordX + rdCoordX.nextInt(rangeX);
 			rangeY = pacman.coordY - HEIGHT_MAP;
@@ -276,7 +276,7 @@ public class objPacman extends objMove implements Runnable{
 		}
 		
 		/* destination thuoc phai tren cua pacman */
-		else if ( ghost.coordX > pacman.coordX && ghost.coordY > pacman.coordY){
+		else if ( ghost.coordX >= pacman.coordX && ghost.coordY >= pacman.coordY){
 			rangeX = pacman.coordX - 100;
 			rdCoordXOfNode = 100 + rdCoordX.nextInt(rangeX);
 			rangeY = pacman.coordY - HEIGHT_MAP;
@@ -290,7 +290,7 @@ public class objPacman extends objMove implements Runnable{
 		}
 		
 		/* destination thuoc phai duoi cua pacman */
-		else if ( ghost.coordX > pacman.coordX && ghost.coordY < pacman.coordY){
+		else if ( ghost.coordX >= pacman.coordX && ghost.coordY <= pacman.coordY){
 			rangeX =  pacman.coordX - 100 - 1;
 			rdCoordXOfNode = 100 + rdCoordX.nextInt(rangeX);
 			rangeY = 100 - pacman.coordY;
@@ -304,7 +304,7 @@ public class objPacman extends objMove implements Runnable{
 		}
 
 		/* destination thuoc trai duoi cua pacman */
-		else if ( ghost.coordX < pacman.coordX && ghost.coordY < pacman.coordY){
+		else if ( ghost.coordX <= pacman.coordX && ghost.coordY <= pacman.coordY){
 			rangeX = 100 + WIDTH_MAP - pacman.coordX;
 			rdCoordXOfNode = pacman.coordX + rdCoordX.nextInt(rangeX);
 			rangeY = 100 - pacman.coordY;
@@ -637,7 +637,11 @@ public class objPacman extends objMove implements Runnable{
 		} else if( minDistanceB < minDistanceA){
 			resultNode = 2;
 		}else{
-			resultNode = estimateAbilityOfNode(tempObjNodeA, tempObjNodeB, A, B, destinationNode);
+			try{
+				resultNode = estimateAbilityOfNode(tempObjNodeA, tempObjNodeB, A, B, destinationNode);
+			}catch(Exception e){
+				resultNode = 1;
+			}
 		}
 		
 		return resultNode;

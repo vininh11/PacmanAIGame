@@ -36,10 +36,18 @@ public class objMove extends objNode {
 		int indexB = mapList.indexOf(B);
 		
 		/* time move */
-		try{
-			TimeUnit.MILLISECONDS.sleep(SPEED_MOVE);
-		} catch( InterruptedException  e){
-			System.out.println(e);
+		if(A.objContent == GHOST_CONTENT) {
+			try{
+				TimeUnit.MILLISECONDS.sleep(SPEED_MOVE_GHOST);
+			} catch( InterruptedException  e){
+				System.out.println(e);
+			}
+		} else {
+			try{
+				TimeUnit.MILLISECONDS.sleep(SPEED_MOVE_PACMAN);
+			} catch( InterruptedException  e){
+				System.out.println(e);
+			}
 		}
 		/* move method */
 		switch(status){
@@ -157,7 +165,7 @@ public class objMove extends objNode {
 		}
 
 		// find left neighbor
-		if(object.coordX == 100 && object.coordY == 90){
+		if(object.coordX == 100 && object.coordY == 93){
 			indexOfOject = mapList.indexOf(object);
 			indexOfTempObject = indexOfOject + WIDTH_MAP - 1;
 			object.neighborListNode.add(mapList.get(indexOfTempObject));
@@ -169,7 +177,7 @@ public class objMove extends objNode {
 		}
 
 		// find right neighbor
-		if(object.coordX == (100 + WIDTH_MAP - 1) && object.coordY == 90){
+		if(object.coordX == (100 + WIDTH_MAP - 1) && object.coordY == 93){
 			indexOfOject = mapList.indexOf(object);
 			indexOfTempObject = indexOfOject - WIDTH_MAP + 1;
 			object.neighborListNode.add(mapList.get(indexOfTempObject));

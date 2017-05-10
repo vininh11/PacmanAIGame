@@ -3,6 +3,7 @@ package object;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.sound.midi.Sequence;
 
@@ -51,6 +52,7 @@ public class objGhost extends objMove implements Runnable{
 		int []status = new int[COUNT];
  		List<List<objNode>> listMove = new ArrayList<List<objNode>>();
  		List<List<objNode>> listNodesWentThrough = new ArrayList<List<objNode>>();
+ 		List<objNode> listNodesWentThroughOld = new ArrayList<objNode>();
  		
 		for(int i = 0; i < COUNT; i++){
 			initNodeFirst[i] = initNode[i];					// Save init Node for the Ghost
@@ -62,7 +64,11 @@ public class objGhost extends objMove implements Runnable{
 		
 		// Find road to destination node
 		while(foodList.size() != 0){
-
+//				try{
+//					TimeUnit.MILLISECONDS.sleep(50);
+//				} catch( InterruptedException  e){
+//					System.out.println(e);
+//				}
 				for(int i = 0; i < COUNT; i++){
 					synchronized(notifyAll){
 						while (notifyAll.runFlg != 2) {
@@ -99,6 +105,14 @@ public class objGhost extends objMove implements Runnable{
 						
 						nextNodeToGo[i] = nextNode(initNode[i], destinationNode[i], listNodesWentThrough.get(i));							// find next node to go
 						if (nextNodeToGo[i] == null) {
+							if (listNodesWentThroughOld != null 
+									&& listNodesWentThroughOld.size() != 0 
+									&& listNodesWentThroughOld.size() == listNodesWentThrough.get(i).size()) {
+								int index = new Random().nextInt(foodList.size() - 1);
+								objNode temp = foodList.get(index);
+								destinationNode[i] = this.searchInMapListByCoord(temp.coordX, temp.coordY);
+							}
+							listNodesWentThroughOld = listNodesWentThrough.get(i);
 							listNodesWentThrough.set(i, new ArrayList<objNode>());
 							nextNodeToGo[i] = nextNode(initNode[i], destinationNode[i], listNodesWentThrough.get(i));
 						}
