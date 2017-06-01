@@ -370,7 +370,8 @@ public class objPacman extends objMove implements Runnable{
 			rdCoordXOfNode = oldDestination.coordX + rdCoordX.nextInt(rangeX);
 			rangeY = oldDestination.coordY - pacman.coordY + 1;
 			rdCoordYOfNode = pacman.coordY + rdCoordY.nextInt(rangeY);
-			objRandom = searchInMapListByCoord(rdCoordXOfNode, rdCoordYOfNode);
+			objNode temp = new objNode(rdCoordXOfNode,rdCoordYOfNode,'.');
+			objRandom = searchIndexInFoodList(foodList, temp);
 			if(objRandom.objContent == ROAD_CONTENT || objRandom.objContent == FOOD_CONTENT){
 				return objRandom;
 			}else{
