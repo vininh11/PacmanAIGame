@@ -594,7 +594,11 @@ public class objPacman extends objMove implements Runnable{
 		} else if( minDistanceB < minDistanceA && cntNeighborB >= cntNeighborA){
 			resultNode = 2;
 		}else{
-			resultNode = estimateAbilityOfNode(tempObjNodeA, tempObjNodeB, A, B, destinationNode);
+			try{
+				resultNode = estimateAbilityOfNode(tempObjNodeA, tempObjNodeB, A, B, destinationNode);
+			} catch (Exception e){
+				return 1;
+			}
 		}
 		
 		return resultNode;
